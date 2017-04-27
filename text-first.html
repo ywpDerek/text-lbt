@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播图</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		ul{
+			list-style: none;
+		}
+		#content{
+			width: 680px;
+			margin: 100px auto;
+			position: relative;
+		}
+		#content img{
+			width: 680px;
+		}
+		#img-box img{
+			display: none;
+		}
+		#img-box img.selected{
+			display: block;
+		}
+		#tab-box{
+			position: absolute;
+			right: 10px;
+			bottom: 10px;
+		}
+		#tab-box li{
+			width: 20px;
+			height: 20px;
+			background: #000;
+			color: #fff;
+			float: left;
+			margin-right: 5px;
+			text-align: center;
+			line-height: 20px;
+		}
+		#tab-box li.selected{
+			background: orange;
+		}
+		#arrow-box{
+			position: absolute;
+			bottom: 10px;
+			left: 10px;
+		}
+		#arrow-box span{
+			display: inline-block;
+			background: #000;
+			color: #fff;
+			width: 20px;
+			height: 20px;
+			line-height: 20px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="content">
+		<div id="img-box">
+			<img class="selected" src="img/001.jpg" alt="">
+			<img src="img/002.jpg" alt="">
+			<img src="img/003.jpg" alt="">
+			<img src="img/004.jpg" alt="">
+		</div>
+		<ul id="tab-box">
+			<li class="selected">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+		</ul>
+		<div id="arrow-box">
+			<span id="left">&lt;</span>
+			<span id="next">&gt;</span>
+		</div>
+	</div>
+	<script>
+		var oContent = document.getElementById('content');
+		var aLi = oContent.getElementsByTagName('li');
+		var aImg = oContent.getElementsByTagName('img');
+		var oLeft = document.getElementById('left');
+		var oNext = document.getElementById('next');
+		var iNow = 0;
+		var timer;
+
+		function changeImg(idx){
+			for(var j=0; j<aLi.length;j++){
+				aLi[j].className = '';
+				aImg[j].className = '';
+			}
+			aLi[idx].className = 'selected';
+			aImg[idx].className = 'selected';
+		}
+
+		for(var i=0; i<aLi.length;i++){
+			aLi[i].index = i;
+			aLi[i].onmouseover = function(){
+				changeImg(this.index);
+				iNow = this.index;
+			}
+		}
+
+		oNext.onclick = function(){
+			iNow++;
+			iNow = iNow%aImg.length;
+				changeImg(iNow);
+		}
+		oLeft.onclick = function(){
+			iNow--;
+			if(iNow == -1){
+				iNow = aImg.length-1;
+			}
+				changeImg(iNow);
+		}
+		
+		run();
+		oContent.onmouseover = function(){ 
+			clearInterval(timer);
+		}
+		oContent.onmouseout = function(){
+			run();
+		}
+		function run(){
+			timer = setInterval(function(){
+			oNext.onclick();
+			},1000);
+		}
+	</script>
+</body>
+</html>
